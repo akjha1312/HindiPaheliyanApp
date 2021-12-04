@@ -1,4 +1,4 @@
-package com.ajnshs.pehliyan;
+package com.aj.pehliyan;
 
 public class Categories {
     private static String[] menuItem = {"सरल पहेलियां", "बाल पहेलियां","मजेदार पहेलियां", "कठिन पहेलियां",

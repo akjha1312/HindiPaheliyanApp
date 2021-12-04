@@ -1,4 +1,4 @@
-package com.ajnshs.pehliyan;
+package com.aj.pehliyan;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

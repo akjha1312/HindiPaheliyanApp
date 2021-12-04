@@ -1,45 +1,36 @@
-package com.ajnshs.pehliyan;
+package com.aj.pehliyan
 
-import android.content.Context;
-import android.graphics.Typeface;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
+import android.content.Context
+import android.widget.BaseAdapter
+import android.view.ViewGroup
+import android.view.LayoutInflater
+import android.graphics.Typeface
+import android.view.View
+import android.widget.TextView
 
-public class MainAdapter extends BaseAdapter {
-    private String[] listTitle;
-    private Context context;
-
-    public MainAdapter(Context context, String[] listTitle) {
-        this.context = context;
-        this.listTitle = listTitle;
+class MainAdapter(private val context: Context, private val listTitle: Array<String>) :
+    BaseAdapter() {
+    override fun getCount(): Int {
+        return listTitle.size
     }
 
-    @Override
-    public int getCount() {
-        return listTitle.length;
+    override fun getItem(position: Int): Any {
+        return listTitle
     }
 
-    @Override
-    public Object getItem(int position) {
-        return listTitle;
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val inflater =
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val row = inflater.inflate(R.layout.singlelist_row_catg, null)
+            val hindiFont = Typeface.createFromAsset(context.assets, "NotoSans-Regular.ttf")
+            val title = row.findViewById<TextView>(R.id.paheliTitle)
+            title.typeface = hindiFont
+            title.text = listTitle[position]
+            return row
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View row = inflater.inflate(R.layout.singlelist_row_catg, parent, false);
-        Typeface hindiFont = Typeface.createFromAsset(context.getAssets(), "NotoSans-Regular.ttf");
-        TextView title = row.findViewById(R.id.paheliTitle);
-        title.setTypeface(hindiFont);
-        title.setText(listTitle[position]);
-        return row;
     }
 }

@@ -1,19 +1,23 @@
-package com.ajnshs.pehliyan;
+package com.aj.pehliyan;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import java.util.ArrayList;
 
@@ -44,16 +48,23 @@ public class PahliActivity extends AppCompatActivity implements View.OnClickList
         adView = findViewById(R.id.adView);
         adView.loadAd(adRequest);
 
-        interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getResources().getString(R.string.Interstitial_ad_unit_id));
-        interstitialAd.loadAd(adRequest);
-        interstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                interstitialAd.loadAd(adRequest);
-            }
-        });
+        InterstitialAd.load(this,getString(R.string.Interstitial_ad_unit_id), adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        interstitialAd = interstitialAd;
+                        Log.i("TAG", "onAdLoaded");
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        Log.i("TAG", loadAdError.getMessage());
+                        interstitialAd = null;
+                    }
+                });
 
         index = getIntent().getIntExtra("posItem", 0);
         dataProvider = new DataProvider(this, getIntent().getIntExtra("posCatg", 0));
@@ -98,8 +109,8 @@ public class PahliActivity extends AppCompatActivity implements View.OnClickList
                     btnShowAns.setText("पहेली देखें");
                     toggle = true;
                     if (adShowCounter >= 4) {
-                        if (interstitialAd.isLoaded()) {
-                            interstitialAd.show();
+                        if (interstitialAd!=null) {
+                            interstitialAd.show(PahliActivity.this);
                         }
                         adShowCounter = 0;
                     } else {
@@ -113,8 +124,8 @@ public class PahliActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btnPre:
                 if (adShowCounter >= 3) {
-                    if (interstitialAd.isLoaded()) {
-                        interstitialAd.show();
+                    if (interstitialAd!=null) {
+                        interstitialAd.show(PahliActivity.this);
                     }
                     adShowCounter = 0;
                 } else {
@@ -130,8 +141,8 @@ public class PahliActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btnNxt:
                 if (adShowCounter >= 3) {
-                    if (interstitialAd.isLoaded()) {
-                        interstitialAd.show();
+                    if (interstitialAd!=null) {
+                        interstitialAd.show(PahliActivity.this);
                     }
                     adShowCounter = 0;
                 } else {

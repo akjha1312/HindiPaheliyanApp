@@ -1,4 +1,4 @@
-package com.ajnshs.pehliyan;
+package com.aj.pehliyan;
 
 import android.content.Intent;
 import android.os.Handler;
